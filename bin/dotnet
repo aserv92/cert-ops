@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source .env
+
+. bin/lib/docker.sh
+. docker/images.sh
+
+docker.ensure.network.exists ${PROJECT_NAME}
+
+mkdir -p "${HOME}/.dotnet"
+mkdir -p "${HOME}/.local/share/NuGet"
+mkdir -p "${HOME}/.nuget"
+
+docker run \
+  -e "LOCAL_USER_ID=$(docker.get.host.user.id)" \
+  -i \
+  "$(docker.get.tty.flag)" \
+  --rm \
+  -w "/${PROJECT_NAME}" \
+  -v "${HOME}/.dotnet:/home/user/.dotnet" \
+  -v "${HOME}/.local/share/NuGet:/home/user/.local/share/NuGet" \
+  -v "${HOME}/.nuget:/home/user/.nuget" \
+  -v .:/"${PROJECT_NAME}" \
+	--net "${PROJECT_NAME}" \
+	"${DOTNET_SDK_IMAGE}" dotnet "$@"
