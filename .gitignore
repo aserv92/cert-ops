@@ -1,0 +1,6 @@
+obj/
+bin/Debug/
+.idea/
+tmp/
+packages/
+Folder.DotSettings.user
