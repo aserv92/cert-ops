@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+rm -rf dist/
+
+publish() {
+    local runtime="$1"
+    local label="$2"
+
+    echo "Compiling ${label} executable..."
+
+    dotnet publish \
+        -c Release \
+        -r "$runtime" \
+        --self-contained true \
+        /p:PublishSingleFile=true \
+        /p:PublishTrimmed=true \
+        -o "./dist/${runtime}"
+
+    echo "Finished compiling ${label} executable..."
+    echo
+}
+
+publish "linux-arm64" "Linux ARM64"
+publish "linux-x64" "Linux x64"
+publish "osx-arm64" "macOS ARM64"
+publish "osx-x64" "macOS x64"
+publish "win-x64" "Windows x64"

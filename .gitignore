@@ -1,6 +1,8 @@
 obj/
 bin/Debug/
+bin/Release/
 .idea/
 tmp/
 packages/
 Folder.DotSettings.user
+dist/
